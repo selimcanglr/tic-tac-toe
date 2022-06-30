@@ -119,19 +119,20 @@ const gameController = (() => {
                 return xLocations.includes(element);     
             })
             if (xWins) {
-                return 'x';
+                return player1.mark == 'x' ? [player1] : [player2];
             }
 
-            const yWins = combination.every(element => {
+            const oWins = combination.every(element => {
                 return oLocations.includes(element);
             })
-            if (yWins) {
-                return 'o';
+            if (oWins) {
+                return player1.mark == 'o' ? [player1] : [player2];
+
             }
         }
 
         if (gameBoard.isFull()) {
-            return 'tie';
+            return [player1, player2];
         }
 
         return undefined;
@@ -144,7 +145,13 @@ const gameController = (() => {
         turnOfPlayer1 = true
     }
 
-    return {reset, playNext, getMarkerAtLocation, checkWinner, changeMarker};
+    const resetMarkers = () => {
+        player1.mark = 'x'
+        player2.mark = 'o'
+        turnOfPlayer1 = true;
+    }
+
+    return {reset, playNext, getMarkerAtLocation, checkWinner, changeMarker, resetMarkers};
 })();
 
 const displayController = (() => {
@@ -164,13 +171,14 @@ const displayController = (() => {
     };
 
     const changeMarker = (event) => {
-        resetBoard()
-        gameController.changeMarker()
-
         if (event.target.id == 'xBtn' && xBtn.classList.contains('selected-side') ||
             event.target.id == 'oBtn' && oBtn.classList.contains('selected-side') ) {
                 return;
             }
+            
+        resetBoard()
+        gameController.changeMarker()
+
         
         xBtn.classList.toggle('selected-side')
         oBtn.classList.toggle('selected-side')
@@ -188,6 +196,17 @@ const displayController = (() => {
         winningMsgDiv.classList.remove("show");
     }
 
+    const resetMarkers = () => {
+        gameController.resetMarkers()
+        xBtn.classList.add('selected-side')
+        oBtn.classList.remove('selected-side')
+    }
+
+    const resetGame = () => {
+        resetBoard()
+        resetMarkers()
+    }
+
     const init = () => {
         // Clicking cells
         let cells = document.querySelectorAll('.cell');
@@ -200,11 +219,13 @@ const displayController = (() => {
 
                 if (winner) {
                     let msg = document.querySelector('.msg');
-                    if (winner == 'tie') {
+
+                    if (winner.length == 2) {
                         msg.textContent = 'It\'s a tie!';
                     }
                     else {
-                        msg.textContent = `${winner} wins!`;
+                        const winningPlayer = winner[0]
+                        msg.textContent = `${winningPlayer.name} wins using ${winningPlayer.mark}!`;
                     }
 
                     let winningMsgDiv = document.querySelector(".winning-msg");
@@ -214,7 +235,7 @@ const displayController = (() => {
         });
 
         // Clicking restart button
-        restartBtn.addEventListener('click', resetBoard);
+        restartBtn.addEventListener('click', resetGame);
 
         // Changing markers
         xBtn.addEventListener('click', changeMarker)
