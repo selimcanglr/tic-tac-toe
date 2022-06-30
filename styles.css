@@ -4,16 +4,25 @@
 
 :root {
     --cell-size: 100px;
-    --mark-size: calc(var(--cell-size) * 0.9)
+    --mark-size: calc(var(--cell-size) * 0.9);
+    --mark-color-x: black;
+    --mark-color-o: black;
 }
 
 body {
     margin: 0px;
 }
 
-.board {
+.game {
     width: 100vw;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.board {
     display: grid;
     justify-content: center;
     align-content: center;
@@ -29,6 +38,11 @@ body {
     align-items: center;
     position: relative;
     cursor: pointer;
+}
+
+.cell.x:hover,
+.cell.o:hover {
+    cursor: not-allowed;
 }
 
 .cell:first-child,
@@ -56,7 +70,7 @@ body {
     content: '';
     width: calc(var(--mark-size) * .15);
     height: var(--mark-size);
-    background-color: black;
+    background-color: var(--mark-color-x);
     position: absolute;
 }
 
@@ -71,7 +85,7 @@ body {
 .cell.o::after,
 .cell.o::before {
     content: '';
-    background-color: black;
+    background-color: var(--mark-color-o);
     position: absolute;
     border-radius: 50%;
 }
@@ -120,4 +134,44 @@ body {
 
 .winning-msg.show {
     display: flex;
+}
+
+.winning-side {
+    font-size: 8rem;
+}
+
+.side-button {
+    border: 2px solid #1A1A1A;
+    background-color: white;
+    color: #3B3B3B;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 100px;
+    min-height: 40px;
+    margin-bottom: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 16px;
+    transition: all 300ms;
+}
+
+.side-button:not(.selected-side):hover {
+    color: #fff;
+    background-color: #1A1A1A;
+    transform: translateY(-5px);
+}
+
+.selected-side {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.btn-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
 }
