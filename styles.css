@@ -11,6 +11,8 @@
 
 body {
     margin: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 }
 
 .game {
@@ -148,8 +150,8 @@ body {
     cursor: pointer;
     border-radius: 15px;
     width: 100px;
-    min-height: 40px;
-    margin-bottom: 50px;
+    min-height: 50px;
+    margin-bottom: 40px;
     font-size: 16px;
     font-weight: 600;
     text-align: center;
@@ -166,13 +168,39 @@ body {
 .selected-side {
     background-color: black;
     color: white;
-    border: 1px solid white;
+    border: 2px solid white;
 }
 
-.btn-container {
+.game-controls {
     width: 100%;
-    display: flex;
-    align-items: center;
+    display: grid;
     justify-content: center;
-    gap: 50px;
+    align-content: center;
+    grid-template-columns: repeat(2, auto);
+    text-align: center;
+    gap: 15px 40px;
+}
+
+.player-name.hide {
+    display: none;
+}
+
+.player-name-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-name-input {
+    border: none;
+    border-radius: 5px;
+    max-width: 100px;
+    display: none;
+    padding: 5px;
+    text-align: center;
+}
+
+
+.player-name-input.show {
+    display: flex;
 }

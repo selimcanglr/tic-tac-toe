@@ -25,6 +25,10 @@ const player = (name, mark) => {
 
         get name() {
             return playerName
+        },
+
+        set name(newName) {
+            playerName = newName
         }
     }
 };
@@ -103,6 +107,7 @@ const gameController = (() => {
         if (isMarkingSuccessful) {
             turnOfPlayer1 = !turnOfPlayer1;
         }
+        return isMarkingSuccessful
     }
 
     const getMarkerAtLocation = (location) => {
@@ -119,15 +124,14 @@ const gameController = (() => {
                 return xLocations.includes(element);     
             })
             if (xWins) {
-                return player1.mark == 'x' ? [player1] : [player2];
+                return [player1];
             }
 
             const oWins = combination.every(element => {
                 return oLocations.includes(element);
             })
             if (oWins) {
-                return player1.mark == 'o' ? [player1] : [player2];
-
+                return [player2];
             }
         }
 
@@ -139,10 +143,7 @@ const gameController = (() => {
     };
 
     const changeMarker = () => {
-        const temp = player1.mark
-        player1.mark = player2.mark
-        player2.mark = temp
-        turnOfPlayer1 = true
+        turnOfPlayer1 = !turnOfPlayer1
     }
 
     const resetMarkers = () => {
@@ -151,14 +152,22 @@ const gameController = (() => {
         turnOfPlayer1 = true;
     }
 
-    return {reset, playNext, getMarkerAtLocation, checkWinner, changeMarker, resetMarkers};
+    const changePlayerName = (playerId, newName) => {
+        let player = playerId == 1 ? player1 : player2
+        player.name = newName
+
+        console.log(player1.name, player2.name)
+    }
+
+    return {reset, playNext, getMarkerAtLocation, checkWinner, changeMarker, resetMarkers, changePlayerName};
 })();
 
 const displayController = (() => {
     // Clicking marker change
     const xBtn = document.getElementById("xBtn")
     const oBtn = document.getElementById("oBtn")
-    const restartBtn = document.querySelector("#restartButton");
+    const restartBtn = document.querySelector("#restartButton")
+    const playerNames = document.querySelectorAll('.player-name')
 
     const renderGameBoard = () => {
         let cells = document.querySelectorAll(".cell");
@@ -175,11 +184,10 @@ const displayController = (() => {
             event.target.id == 'oBtn' && oBtn.classList.contains('selected-side') ) {
                 return;
             }
-            
+
         resetBoard()
         gameController.changeMarker()
 
-        
         xBtn.classList.toggle('selected-side')
         oBtn.classList.toggle('selected-side')
     }
@@ -212,24 +220,29 @@ const displayController = (() => {
         let cells = document.querySelectorAll('.cell');
         cells.forEach((cell) => {
             cell.addEventListener('click', () => {
-                gameController.playNext(cell.id);
+                const isMarkingSuccessful = gameController.playNext(cell.id);
                 renderGameBoard();
 
-                let winner = gameController.checkWinner();
-
-                if (winner) {
-                    let msg = document.querySelector('.msg');
-
-                    if (winner.length == 2) {
-                        msg.textContent = 'It\'s a tie!';
+                if (isMarkingSuccessful) {
+                    xBtn.classList.toggle('selected-side')
+                    oBtn.classList.toggle('selected-side')
+    
+                    let winner = gameController.checkWinner();
+    
+                    if (winner) {
+                        let msg = document.querySelector('.msg');
+    
+                        if (winner.length == 2) {
+                            msg.textContent = 'It\'s a tie!';
+                        }
+                        else {
+                            const winningPlayer = winner[0]
+                            msg.textContent = `${winningPlayer.name} wins using ${winningPlayer.mark}!`;
+                        }
+    
+                        let winningMsgDiv = document.querySelector(".winning-msg");
+                        winningMsgDiv.classList.add("show");
                     }
-                    else {
-                        const winningPlayer = winner[0]
-                        msg.textContent = `${winningPlayer.name} wins using ${winningPlayer.mark}!`;
-                    }
-
-                    let winningMsgDiv = document.querySelector(".winning-msg");
-                    winningMsgDiv.classList.add("show");
                 }
             });
         });
@@ -240,11 +253,43 @@ const displayController = (() => {
         // Changing markers
         xBtn.addEventListener('click', changeMarker)
         oBtn.addEventListener('click', changeMarker)
-    }
 
+        // Changing player names
+        document.querySelectorAll('.player-name').forEach((name) => {
+            name.addEventListener('click', displayTextInput)
+        })
+
+        document.querySelectorAll('.player-name-input').forEach((input) => {
+            input.addEventListener('focusout', displayNewName)
+        })
+
+        function displayTextInput(evt) {
+            const playerId = evt.target.getAttribute('data-player-id')
+            const textInput = document.getElementById(playerId)
+
+            evt.target.classList.add('hide')
+            textInput.classList.add('show')
+            textInput.value = evt.target.innerText
+            textInput.focus()
+        }
+
+        function displayNewName(evt) {
+            const nameValue = evt.target.value
+            const playerDiv = document.querySelector(`[data-player-id="${evt.target.id}"]`)
+
+            let newName = nameValue ? nameValue.trim() : `Player ${evt.target.id}`
+            playerDiv.innerText = newName
+            gameController.changePlayerName(evt.target.id, newName)
+
+            evt.target.classList.remove('show')
+            playerDiv.classList.remove('hide')
+        }
+
+    }
 
     return {init};
 })();
+
 
 
 displayController.init();
