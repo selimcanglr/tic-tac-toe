@@ -164,13 +164,18 @@ const gameController = (() => {
 
 const displayController = (() => {
     // Clicking marker change
-    const xBtn = document.getElementById("xBtn")
-    const oBtn = document.getElementById("oBtn")
-    const restartBtn = document.querySelector("#restartButton")
+    const xBtn = document.getElementById('xBtn')
+    const oBtn = document.getElementById('oBtn')
+    const player1ColorPicker = document.getElementById('player1Color')
+    const player2ColorPicker = document.getElementById('player2Color')
+    const cellColorPicker = document.getElementById('cellColor')
+    const restartBtn = document.querySelector('#restartButton')
     const playerNames = document.querySelectorAll('.player-name')
+    const root = document.querySelector(':root')
+    const resetBtn = document.getElementById('resetBtn')
 
     const renderGameBoard = () => {
-        let cells = document.querySelectorAll(".cell");
+        let cells = document.querySelectorAll('.cell');
         for (let i = 0; i < CELL_NUMBER; i++) {
             let currentMarker = gameController.getMarkerAtLocation(i);
             if (currentMarker) {
@@ -193,15 +198,15 @@ const displayController = (() => {
     }
 
     const resetBoard = () => {
-        let cells = document.querySelectorAll(".cell");
+        let cells = document.querySelectorAll('.cell');
         gameController.reset();
         for (let i = 0; i < CELL_NUMBER; i++) {
             cells[i].classList.remove('x');
             cells[i].classList.remove('o');
         }
         
-        let winningMsgDiv = document.querySelector(".winning-msg");
-        winningMsgDiv.classList.remove("show");
+        let winningMsgDiv = document.querySelector('.winning-msg');
+        winningMsgDiv.classList.remove('show');
     }
 
     const resetMarkers = () => {
@@ -240,15 +245,15 @@ const displayController = (() => {
                             msg.textContent = `${winningPlayer.name} wins using ${winningPlayer.mark}!`;
                         }
     
-                        let winningMsgDiv = document.querySelector(".winning-msg");
-                        winningMsgDiv.classList.add("show");
+                        let winningMsgDiv = document.querySelector('.winning-msg');
+                        winningMsgDiv.classList.add('show');
                     }
                 }
-            });
-        });
+            })
+        })
 
         // Clicking restart button
-        restartBtn.addEventListener('click', resetGame);
+        restartBtn.addEventListener('click', resetGame)
 
         // Changing markers
         xBtn.addEventListener('click', changeMarker)
@@ -284,6 +289,34 @@ const displayController = (() => {
             evt.target.classList.remove('show')
             playerDiv.classList.remove('hide')
         }
+
+        // Changing color
+        player1ColorPicker.addEventListener('input', (evt) => {
+            root.style.setProperty('--mark-color-x', evt.target.value)
+        })
+
+        player2ColorPicker.addEventListener('input', (evt) => {
+            root.style.setProperty('--mark-color-o', evt.target.value)
+        })
+
+        cellColorPicker.addEventListener('input', (evt) => {
+            root.style.setProperty('--cell-color', evt.target.value)
+        })
+                
+        // Clicking reset button
+        resetBtn.addEventListener('click', resetGame)
+        resetBtn.addEventListener('click', resetColors)
+
+        function resetColors() {
+            root.style.setProperty('--mark-color-x', 'black')
+            root.style.setProperty('--mark-color-o', 'black')
+            root.style.setProperty('--cell-color', 'black')
+            player1ColorPicker.value = 'black'
+            player2ColorPicker.value = 'black'
+            cellColorPicker.value = 'black'
+
+        }
+
 
     }
 

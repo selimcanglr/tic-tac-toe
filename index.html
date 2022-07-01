@@ -14,30 +14,49 @@
 <body>
 
     <div class="game" id="game">
-
-        <div class="game-controls">
-            <div>
-                <div class="player-name" data-player-id="1">Player 1</div>
-                <input class="player-name-input" type="text" id="1">
+        <div class="">
+            <div class="game-controls">
+                <div>
+                    <div class="player-name player1" data-player-id="1">Player 1</div>
+                    <input class="player-name-input player1" type="text" id="1">
+                </div>
+                <div>
+                    <div class="player-name player2" data-player-id="2">Player 2</div>
+                    <input class="player-name-input player2" type="text" id="2">
+                </div>
+        
+                <button class="btn side-button selected-side player1" id="xBtn">X</button>
+                <button class="btn side-button player2" id="oBtn">O</button>
             </div>
-            <div>
-                <div class="player-name" data-player-id="2">Player 2</div>
-                <input class="player-name-input" type="text" id="2">
+            <div class="board">
+                <div class="cell" id="0"></div>
+                <div class="cell" id="1"></div>
+                <div class="cell" id="2"></div>
+                <div class="cell" id="3"></div>
+                <div class="cell" id="4"></div>
+                <div class="cell" id="5"></div>
+                <div class="cell" id="6"></div>
+                <div class="cell" id="7"></div>
+                <div class="cell" id="8"></div>
             </div>
-    
-            <button class="side-button selected-side" id="xBtn">X</button>
-            <button class="side-button" id="oBtn">O</button>
+            <div class="flex-center">
+                <button class="btn" id="resetBtn">Reset</button>
+            </div>
         </div>
-        <div class="board">
-            <div class="cell" id="0"></div>
-            <div class="cell" id="1"></div>
-            <div class="cell" id="2"></div>
-            <div class="cell" id="3"></div>
-            <div class="cell" id="4"></div>
-            <div class="cell" id="5"></div>
-            <div class="cell" id="6"></div>
-            <div class="cell" id="7"></div>
-            <div class="cell" id="8"></div>
+        <div class="game-config">
+            <div class="color-pick-div">
+                <label for="player1Color">Player 1:</label>
+                <input type="color" name="" class="color-picker" id="player1Color">
+            </div>
+            <div class="color-pick-div">
+                <label for="player2Color">Player 2:</label>
+                <input type="color" name="" class="color-picker" id="player2Color">
+            </div>
+            <div class="color-pick-div">
+                <label for="cellColor">Cells:</label>
+                <input type="color" name="" class="color-picker" id="cellColor">
+            </div>
+
         </div>
     </div>
     <div class="winning-msg">

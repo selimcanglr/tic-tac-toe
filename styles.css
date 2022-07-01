@@ -3,10 +3,11 @@
 }
 
 :root {
-    --cell-size: 100px;
+    --cell-size: 110px;
     --mark-size: calc(var(--cell-size) * 0.9);
     --mark-color-x: black;
     --mark-color-o: black;
+    --cell-color: black;
 }
 
 body {
@@ -17,11 +18,34 @@ body {
 
 .game {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.game-config {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 50px;
+}
+
+.color-pick-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    gap: 5px;
+}
+
+.color-picker {
+    height: 30px;
+    width: 50px;
 }
 
 .board {
@@ -34,7 +58,7 @@ body {
 .cell {
     width: var(--cell-size);
     height: var(--cell-size);
-    border: 1px solid black;
+    border: 1px solid var(--cell-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -143,7 +167,7 @@ body {
     font-size: 8rem;
 }
 
-.side-button {
+.btn {
     border: 2px solid #1A1A1A;
     background-color: white;
     color: #3B3B3B;
@@ -151,12 +175,20 @@ body {
     border-radius: 15px;
     width: 100px;
     min-height: 50px;
-    margin-bottom: 40px;
     font-size: 16px;
     font-weight: 600;
     text-align: center;
     padding: 8px 16px;
     transition: all 300ms;
+}
+
+.btn:hover {
+    color: #fff;
+    background-color: #1A1A1A;
+}
+
+.side-button {
+    margin-bottom: 40px;
 }
 
 .side-button:not(.selected-side):hover {
@@ -203,4 +235,30 @@ body {
 
 .player-name-input.show {
     display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#resetBtn {
+    margin-top: 40px;
+}
+
+.player1:not(button) {
+    color: var(--mark-color-x);
+}
+
+.player2:not(button) {
+    color: var(--mark-color-o);
+}
+
+.btn.player1 {
+    border-color: var(--mark-color-x);
+}
+
+.btn.player2 {
+    border-color: var(--mark-color-o);
 }
