@@ -1,3 +1,6 @@
+// On hovering buttons, chose the hover color as the inverted color of the currently chosen color
+
+
 const CELL_NUMBER = 9;
 const WINNING_COMBINATIONS = [
     [0, 1, 2],
